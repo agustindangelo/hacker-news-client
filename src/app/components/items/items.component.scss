@@ -1,0 +1,46 @@
+.container {
+  max-width: 80%;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+mat-toolbar {
+  border-radius: 16px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.search-box {
+  width: 100%;
+  margin: 20px auto;
+}
+
+mat-list-item {
+  justify-content: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%; /* Ensure the list item takes up the full width */
+  height: 300px;
+}
+
+mat-list-item:last-child {
+  border-bottom: none;
+}
+
+.story-list-item {
+  min-height: 110px;
+  align-items: stretch;
+}
+
+.no-stories-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  text-align: center;
+  font-size: 1.2em;
+  color: #757575;
+}

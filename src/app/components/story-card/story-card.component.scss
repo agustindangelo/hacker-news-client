@@ -1,0 +1,43 @@
+.story-card {
+  width: 100%;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title mat-icon {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.story-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.story-details p,
+.story-details a {
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.no-comments {
+  color: #757575;
+}

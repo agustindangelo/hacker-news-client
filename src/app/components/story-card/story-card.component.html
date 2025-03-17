@@ -1,0 +1,38 @@
+<mat-card class="story-card">
+  <mat-card-header class="title-container">
+    <mat-card-title>
+      <div class="title">
+        <h3 *ngIf="story.url; else noUrl">
+          <a [href]="story.url" target="_blank" [matTooltip]="story.url" data-testid="story-title">
+            {{ story.title }}
+            <mat-icon aria-hidden="false" aria-label="Link icon" fontIcon="link"></mat-icon>
+          </a>
+        </h3>
+        <ng-template #noUrl>
+          <h3 matTooltip="Sadly, this story has no link." data-testid="story-title">
+            {{ story.title }}
+            <mat-icon aria-hidden="false" aria-label="No link icon" fontIcon="link_off"></mat-icon>
+          </h3>
+        </ng-template>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="story-details">
+      <p data-testid="story-author">
+        By: <b>{{ story.by }}</b>
+      </p>
+      <p data-testid="story-time">{{ story.time | unixTimestamp }}</p>
+      <p data-testid="story-score">
+        Score: <b>{{ story.score }}</b>
+      </p>
+      <a *ngIf="story.descendants > 0; else noComments" (click)="openCommentsModal()" data-testid="story-comments-link">
+        See {{ story.descendants }} {{ story.descendants === 1 ? 'comment' : 'comments' }}
+      </a>
+      <ng-template #noComments>
+        <p class="no-comments" data-testid="story-no-comments">No comments</p>
+      </ng-template>
+    </div>
+  </mat-card-content>
+</mat-card>

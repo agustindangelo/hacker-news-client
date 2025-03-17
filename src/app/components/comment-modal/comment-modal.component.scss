@@ -1,0 +1,20 @@
+.comment {
+  margin-bottom: 15px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-date {
+  margin-left: auto;
+  font-size: 0.9em;
+  color: #757575;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
