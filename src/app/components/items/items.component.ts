@@ -16,19 +16,19 @@ import { StoryCardComponent } from '../story-card/story-card.component';
 
 @Component({
   selector: 'app-items',
-  // standalone: true,
-  // imports: [
-  //   CommonModule,
-  //   MatToolbarModule,
-  //   MatFormFieldModule,
-  //   MatInputModule,
-  //   MatListModule,
-  //   MatPaginatorModule,
-  //   MatCardModule,
-  //   ReactiveFormsModule,
-  //   HttpClientModule,
-  //   StoryCardComponent
-  // ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    StoryCardComponent
+  ],
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.scss']
 })
