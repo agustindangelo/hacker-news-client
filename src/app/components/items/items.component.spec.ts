@@ -91,6 +91,13 @@ describe('ItemsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should fetch newest stories ids on initialize', () => {
+    itemsService.getNewestStoriesIds.and.returnValue(of(dummyStoriesIds));
+    component.ngOnInit();
+    expect(itemsService.getNewestStoriesIds).toHaveBeenCalled();
+    expect(component.storiesIds.length).toBe(3);
+  });
+
   it('should fetch stories on initialize', () => {
     itemsService.getStories.and.returnValue(of(dummyStories));
     component.ngOnInit();

@@ -61,6 +61,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(): void {
+    this.fetchStoriesIds();
     this.fetchItems();
   }
 
@@ -85,6 +86,24 @@ export class ItemsComponent implements OnInit, OnDestroy {
         } else {
           this.fetchItems();
         }
+      });
+  }
+
+  private fetchStoriesIds(): void {
+    this.loading = true;
+    this.itemsService
+      .getNewestStoriesIds()
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching story IDs', error);
+          return of([]);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data) => {
+        this.storiesIds = data;
+        this.totalStories = data.length;
+        this.loading = false;
       });
   }
 
