@@ -62,7 +62,7 @@ describe('ItemsService', () => {
   });
 
   it('should fetch newest stories ids', () => {
-    service.getNewestStoriesIds().subscribe((ids) => {
+    service.getLatestStoriesIds().subscribe((ids) => {
       expect(ids.length).toBe(dummyStories.length);
       expect(ids).toEqual(dummyIds);
     });
@@ -84,7 +84,7 @@ describe('ItemsService', () => {
     reqIds.flush(dummyIds);
 
     dummyIds.slice(0, pageSize).forEach((id, index) => {
-      const reqStory = httpMock.expectOne(`${environment.apiBaseUrl}/item/${id}`);
+      const reqStory = httpMock.expectOne(`${environment.apiBaseUrl}/items/${id}`);
       expect(reqStory.request.method).toBe('GET');
       reqStory.flush(dummyStories[index]);
     });
@@ -97,7 +97,7 @@ describe('ItemsService', () => {
       expect(story).toEqual(dummyStory);
     });
 
-    const req = httpMock.expectOne(`${environment.apiBaseUrl}/item/${dummyStory.id}`);
+    const req = httpMock.expectOne(`${environment.apiBaseUrl}/items/${dummyStory.id}`);
     expect(req.request.method).toBe('GET');
     req.flush(dummyStory);
   });
@@ -111,7 +111,7 @@ describe('ItemsService', () => {
       expect(stories).toEqual(matchingStories);
     });
 
-    const req = httpMock.expectOne(`${environment.apiBaseUrl}/item/search?title=Story`);
+    const req = httpMock.expectOne(`${environment.apiBaseUrl}/items/search?title=Story`);
     expect(req.request.method).toBe('GET');
     req.flush(dummyStories);
   });
@@ -129,7 +129,7 @@ describe('ItemsService', () => {
     });
 
     commentIds.forEach((id, index) => {
-      const req = httpMock.expectOne(`${environment.apiBaseUrl}/item/${id}`);
+      const req = httpMock.expectOne(`${environment.apiBaseUrl}/items/${id}`);
       expect(req.request.method).toBe('GET');
       req.flush(dummyComments[index]);
     });

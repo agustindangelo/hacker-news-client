@@ -57,7 +57,7 @@ describe('ItemsComponent', () => {
 
   beforeEach(async () => {
     const itemsServiceSpy = jasmine.createSpyObj('ItemsService', [
-      'getNewestStoriesIds',
+      'getLatestStoriesIds',
       'getStories',
       'searchStories'
     ]);
@@ -82,7 +82,7 @@ describe('ItemsComponent', () => {
     component = fixture.componentInstance;
     itemsService = TestBed.inject(ItemsService) as jasmine.SpyObj<ItemsService>;
 
-    itemsService.getNewestStoriesIds.and.returnValue(of(dummyStoriesIds));
+    itemsService.getLatestStoriesIds.and.returnValue(of(dummyStoriesIds));
     itemsService.getStories.and.returnValue(of(dummyStories));
     itemsService.searchStories.and.returnValue(of(dummyStories));
   });
@@ -92,9 +92,9 @@ describe('ItemsComponent', () => {
   });
 
   it('should fetch newest stories ids on initialize', () => {
-    itemsService.getNewestStoriesIds.and.returnValue(of(dummyStoriesIds));
+    itemsService.getLatestStoriesIds.and.returnValue(of(dummyStoriesIds));
     component.ngOnInit();
-    expect(itemsService.getNewestStoriesIds).toHaveBeenCalled();
+    expect(itemsService.getLatestStoriesIds).toHaveBeenCalled();
     expect(component.storiesIds.length).toBe(3);
   });
 

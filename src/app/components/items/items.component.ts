@@ -92,7 +92,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
   private fetchStoriesIds(): void {
     this.loading = true;
     this.itemsService
-      .getNewestStoriesIds()
+      .getLatestStoriesIds()
       .pipe(
         catchError((error) => {
           console.error('Error fetching story IDs', error);
