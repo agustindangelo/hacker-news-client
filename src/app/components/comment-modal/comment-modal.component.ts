@@ -9,16 +9,25 @@ import { Comment } from '../../models/Comment';
 import { MatButtonModule } from '@angular/material/button';
 import { catchError, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-comment-modal',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule, UnixTimestampPipe, MatDividerModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    UnixTimestampPipe,
+    MatDividerModule,
+    LoadingSpinnerComponent
+  ],
   templateUrl: './comment-modal.component.html',
   styleUrls: ['./comment-modal.component.scss']
 })
 export class CommentModalComponent implements OnInit, OnDestroy {
   comments: Comment[] = [];
+  loading = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -36,6 +45,7 @@ export class CommentModalComponent implements OnInit, OnDestroy {
   }
 
   fetchComments() {
+    this.loading = true;
     this.itemsService
       .getComments(this.data.commentIds)
       .pipe(
@@ -47,6 +57,7 @@ export class CommentModalComponent implements OnInit, OnDestroy {
       )
       .subscribe((comments) => {
         this.comments = comments;
+        this.loading = false;
       });
   }
 }

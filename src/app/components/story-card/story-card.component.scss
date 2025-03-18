@@ -10,10 +10,20 @@
 }
 
 .story-details {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: 10px;
   width: 100%;
   margin-top: 10px;
+}
+
+.story-details > :first-child {
+  justify-self: start;
+}
+
+.story-details > :last-child {
+  justify-self: end;
 }
 
 h3 {

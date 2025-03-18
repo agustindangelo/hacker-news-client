@@ -1,6 +1,8 @@
-<mat-card class="container">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+<mat-card class="container" [class.loading]="loading">
   <mat-toolbar color="primary" data-testid="top-stories-toolbar">
-    <span>Top Stories</span>
+    <span><b>Top Stories</b></span>
   </mat-toolbar>
 
   <mat-form-field appearance="outline" class="search-box">

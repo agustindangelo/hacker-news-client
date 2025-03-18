@@ -1,16 +1,19 @@
 <h2 mat-dialog-title>Comments</h2>
 <mat-dialog-content>
-  <div *ngFor="let comment of comments" class="comment">
-    <div class="comment-header">
-      <p>
-        <b>{{ comment.by }}</b>
-      </p>
-      <p class="comment-date">{{ comment.time | unixTimestamp }}</p>
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+  <div *ngIf="!loading">
+    <div *ngFor="let comment of comments" class="comment">
+      <div class="comment-header">
+        <p>
+          <b>{{ comment.by }}</b>
+        </p>
+        <p class="comment-date">{{ comment.time | unixTimestamp }}</p>
+      </div>
+      <p>{{ comment.text }}</p>
+      <mat-divider></mat-divider>
     </div>
-    <p>{{ comment.text }}</p>
-    <mat-divider></mat-divider>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-flat-button mat-dialog-close>Close</button>
+  <button mat-button mat-dialog-close>Close</button>
 </mat-dialog-actions>
