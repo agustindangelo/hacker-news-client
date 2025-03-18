@@ -13,9 +13,9 @@
     </mat-error>
   </mat-form-field>
 
-  <ng-container *ngIf="items.length > 0; else noStories">
+  <ng-container *ngIf="itemsToShow.length > 0; else noStories">
     <mat-list>
-      <mat-list-item *ngFor="let item of items" class="story-list-item">
+      <mat-list-item *ngFor="let item of itemsToShow" class="story-list-item">
         <app-story-card [story]="item"></app-story-card>
       </mat-list-item>
     </mat-list>

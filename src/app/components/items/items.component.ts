@@ -7,7 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  takeUntil
+} from 'rxjs/operators';
 import { of, Subscription, Subject } from 'rxjs';
 import { ItemsService } from '../../services/items.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -37,10 +44,12 @@ import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-sp
 export class ItemsComponent implements OnInit, OnDestroy {
   loading = false;
   items: Story[] = [];
+  itemsToShow: Story[] = [];
+  searchResults: Story[] = [];
+  subscriptions = new Array<Subscription>();
   pageSize = 5;
   currentPage = 1;
   searchQuery = new FormControl('', [Validators.maxLength(50)]);
-  private searchSubscription: Subscription | undefined;
   private destroy$ = new Subject<void>();
   storiesIds: number[] = [];
   totalStories = 0;
@@ -55,38 +64,62 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.searchSubscription?.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   private initializeData(): void {
     this.fetchStoriesIds();
-    this.fetchItems();
+    this.fetchItems(this.currentPage, this.pageSize);
   }
 
   private setupSearchSubscription(): void {
-    this.searchSubscription = this.searchQuery.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe((query) => {
-        this.loading = true;
-        if (query) {
+    this.subscriptions.push(
+      this.searchQuery.valueChanges
+        .pipe(
+          debounceTime(500),
+          distinctUntilChanged(),
+          takeUntil(this.destroy$),
+          filter((query) => !!query)
+        )
+        .subscribe((query) => {
+          this.loading = true;
           this.itemsService
-            .searchStories(query)
+            .searchStories(query!)
             .pipe(
               catchError((error) => {
                 console.error('Error searching stories', error);
                 return of([]);
-              })
+              }),
+              finalize(() => (this.loading = false))
             )
             .subscribe((data) => {
-              this.items = data;
-              this.loading = false;
+              this.searchResults = data;
+              this.itemsToShow = this.searchResults.slice(0, this.pageSize);
+              this.totalStories = this.searchResults.length;
+              this.currentPage = 0;
             });
-        } else {
-          this.fetchItems();
-        }
-      });
+        })
+    );
+
+    this.subscriptions.push(
+      this.searchQuery.valueChanges
+        .pipe(
+          debounceTime(500),
+          distinctUntilChanged(),
+          takeUntil(this.destroy$),
+          filter((query) => query!.length === 0)
+        )
+        .subscribe(() => {
+          this.clearSearch();
+        })
+    );
+  }
+
+  private clearSearch(): void {
+    this.totalStories = this.storiesIds.length;
+    this.itemsToShow = this.items;
   }
 
   private fetchStoriesIds(): void {
@@ -98,35 +131,43 @@ export class ItemsComponent implements OnInit, OnDestroy {
           console.error('Error fetching story IDs', error);
           return of([]);
         }),
+        finalize(() => (this.loading = false)),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
         this.storiesIds = data;
         this.totalStories = data.length;
-        this.loading = false;
       });
   }
 
-  private fetchItems(): void {
+  private fetchItems(currentPage: number, pageSize: number): void {
     this.loading = true;
     this.itemsService
-      .getStories(this.currentPage, this.pageSize)
+      .getStories(currentPage, pageSize)
       .pipe(
         catchError((error) => {
           console.error('Error fetching stories', error);
           return of([]);
         }),
+        finalize(() => (this.loading = false)),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
         this.items = data;
-        this.loading = false;
+        this.totalStories = this.storiesIds.length;
+        this.itemsToShow = this.items.slice(0, this.pageSize);
       });
   }
 
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex + 1;
     this.pageSize = event.pageSize;
-    this.fetchItems();
+    if (this.searchQuery.value) {
+      const fromIndex = event.pageIndex * event.pageSize;
+      const toIndex = fromIndex + event.pageSize;
+      this.itemsToShow = this.searchResults.slice(fromIndex, toIndex);
+    } else {
+      this.fetchItems(this.currentPage, this.pageSize);
+    }
   }
 }
