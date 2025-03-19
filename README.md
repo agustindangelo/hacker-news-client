@@ -35,7 +35,17 @@ To run the Playwright tests:
    npx playwright install
    ```
 
-2. Run the tests:
+2. Run the [API component](https://github.com/agustindangelo/hacker-news-api) locally and serve this Angular project:
+On `hacker-news-api`:
+   ```bash
+   dotnet run
+   ```
+On `hacker-news-client`:
+   ```bash
+   ng serve
+   ```
+
+3. Run the tests:
    ```bash
    npm run test:e2e
    ```
