@@ -39,7 +39,7 @@ To run the Playwright tests:
 
    On `hacker-news-api`:
       ```bash
-      dotnet run
+      dotnet run --project .\HackerNews.Api\
       ```
    On `hacker-news-client`:
       ```bash
