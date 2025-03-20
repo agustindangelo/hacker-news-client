@@ -123,7 +123,6 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   private fetchStoriesIds(): void {
-    this.loading = true;
     this.itemsService
       .getLatestStoriesIds()
       .pipe(
@@ -131,7 +130,6 @@ export class ItemsComponent implements OnInit, OnDestroy {
           console.error('Error fetching story IDs', error);
           return of([]);
         }),
-        finalize(() => (this.loading = false)),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
